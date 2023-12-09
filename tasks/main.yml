@@ -13,3 +13,9 @@
 - name: Configure CloudWatch Agent
   ansible.builtin.include_tasks: cloudwatch-agent-config.yml
   when: cloudwatch_agent_ssm_configured == false
+
+- name: Start CloudWatch Agent
+  command: |
+    /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+    -m {{ cloudwatch_agent_mode }} \
+    -a start
