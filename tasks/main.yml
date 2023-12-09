@@ -1,10 +1,21 @@
 ---
 
-- name: Check if amazon-cloudwatch-agent exist
+- name: Check if CloudWatch agent is installed
   ansible.builtin.stat:
-    path: /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl
+    path: /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent
   register: cloudwatch_agent_installed
   changed_when: false
+
+- name: Check CloudWatch agent version
+  ansible.builtin.shell: /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent --version
+  register: cloudwatch_agent_version
+  changed_when: false
+  when: cloudwatch_agent_installed.stat.exists == true
+
+- name: Show CloudWatch agent version
+  ansible.builtin.debug:
+    msg: "CloudWatch agent version: {{ cloudwatch_agent_version.stdout }}"
+  when: cloudwatch_agent_installed.stat.exists == true
 
 - name: Install CloudWatch Agent
   ansible.builtin.include_tasks: cloudwatch-agent-install.yml
@@ -13,9 +24,3 @@
 - name: Configure CloudWatch Agent
   ansible.builtin.include_tasks: cloudwatch-agent-config.yml
   when: cloudwatch_agent_ssm_configured == false
-
-- name: Start CloudWatch Agent
-  command: |
-    /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
-    -m {{ cloudwatch_agent_mode }} \
-    -a start
