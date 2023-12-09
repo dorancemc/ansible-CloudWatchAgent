@@ -1,6 +1,6 @@
 ---
 
-- name: restart cloudwatch agent
+- name: Restart cloudwatch agent
   ansible.builtin.service:
     name: amazon-cloudwatch-agent
     state: restarted

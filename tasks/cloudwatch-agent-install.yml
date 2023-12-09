@@ -19,9 +19,11 @@
     deb: /tmp/amazon-cloudwatch-agent.deb
     state: present
   when: ansible_os_family == "Debian"
+  notify: Start CloudWatch Agent
 
 - name: Install CloudWatch Agent on RedHat,CentOS or SuSE
   ansible.builtin.yum:
     name: /tmp/amazon-cloudwatch-agent.rpm
     state: present
   when: ansible_os_family in ["RedHat","CentOS","SuSE"]
+  notify: Start CloudWatch Agent
