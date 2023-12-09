@@ -1,5 +1,6 @@
 ---
 
+cloudwatch_user: cwagent
 cloudwatch_agent_force_install: false
 cloudwatch_agent_ssm_configured: false
 cloudwatch_agent_mode: ec2 # ec2 or onPremise

@@ -4,8 +4,8 @@
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: /opt/aws/amazon-cloudwatch-agent/etc/{{ item|basename }}
-    owner: cwagent
-    group: cwagent
+    owner: "{{ cloudwatch_user }}"
+    group: "{{ cloudwatch_user }}"
     mode: 0664
   with_items: "{{ __cloudwatch_config_files.values() }}"
   notify: Restart cloudwatch agent
@@ -14,8 +14,8 @@
   ansible.builtin.file:
     path: /opt/aws/amazon-cloudwatch-agent/user
     state: directory
-    owner: cwagent
-    group: cwagent
+    owner: "{{ cloudwatch_user }}"
+    group: "{{ cloudwatch_user }}"
     mode: 0775
   when:
     - cloudwatch_config_json_file is defined
@@ -24,8 +24,8 @@
   ansible.builtin.copy:
     src: "{{ cloudwatch_config_json_file }}"
     dest: /opt/aws/amazon-cloudwatch-agent/user/{{ cloudwatch_config_json_file|basename }}
-    owner: cwagent
-    group: cwagent
+    owner: "{{ cloudwatch_user }}"
+    group: "{{ cloudwatch_user }}"
     mode: 0664
   when:
     - cloudwatch_config_json_file is defined
