@@ -1,0 +1,8 @@
+---
+
+cloudwatch_agent_force_install: false
+cloudwatch_agent_ssm_configured: false
+cloudwatch_config_files: {}
+default_cloudwatch_config_files:
+  agent_yaml: amazon-cloudwatch-agent.yaml
+  env-config: env-config.json

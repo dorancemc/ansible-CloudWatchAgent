@@ -1,0 +1,27 @@
+---
+
+# https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/download-cloudwatch-agent-commandline.html
+
+- name: Install CloudWatch Agent
+  ansible.builtin.yum:
+    name: amazon-cloudwatch-agent
+    state: latest
+  when: ansible_os_family == "Amazon"
+
+- name: Download CloudWatch Agent
+  ansible.builtin.get_url:
+    url: "https://s3.amazonaws.com/amazoncloudwatch-agent/{{ ansible_distribution|lower }}/{{ 'amd64' if ansible_architecture=='x86_64' else ansible_architecture }}/latest/amazon-cloudwatch-agent.{{ 'deb' if ansible_os_family == 'Debian' else 'rpm' }}"
+    dest: /tmp/amazon-cloudwatch-agent.{{ 'deb' if ansible_os_family == 'Debian' else 'rpm' }}
+  when: ansible_os_family != "Amazon"
+
+- name: Install CloudWatch Agent on Debian
+  ansible.builtin.apt:
+    deb: /tmp/amazon-cloudwatch-agent.deb
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install CloudWatch Agent on RedHat,CentOS or SuSE
+  ansible.builtin.yum:
+    name: /tmp/amazon-cloudwatch-agent.rpm
+    state: present
+  when: ansible_os_family in ["RedHat","CentOS","SuSE"]

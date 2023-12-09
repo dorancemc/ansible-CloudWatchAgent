@@ -1,0 +1,3 @@
+---
+
+__cloudwatch_config_files: "{{ default_cloudwatch_config_files | ansible.builtin.combine(cloudwatch_config_files) }}"

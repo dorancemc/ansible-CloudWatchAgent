@@ -1,0 +1,11 @@
+---
+
+- name: Copy definition file from local path
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /opt/aws/amazon-cloudwatch-agent/etc/{{ item|basename }}
+    owner: cwagent
+    group: cwagent
+    mode: 0664
+  with_items: "{{ __cloudwatch_config_files.values() }}"
+  notify: restart cloudwatch agent

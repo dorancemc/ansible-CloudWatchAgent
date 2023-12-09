@@ -1,0 +1,15 @@
+---
+
+- name: Check if amazon-cloudwatch-agent exist
+  ansible.builtin.stat:
+    path: /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl
+  register: cloudwatch_agent_installed
+  changed_when: false
+
+- name: Install CloudWatch Agent
+  ansible.builtin.include_tasks: cloudwatch-agent-install.yml
+  when: cloudwatch_agent_installed.stat.exists == false or cloudwatch_agent_force_install == true
+
+- name: Configure CloudWatch Agent
+  ansible.builtin.include_tasks: cloudwatch-agent-config.yml
+  when: cloudwatch_agent_ssm_configured == false
