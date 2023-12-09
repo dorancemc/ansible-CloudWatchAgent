@@ -1,5 +1,18 @@
 ---
 
+- name: Apply cloudwatch agent config
+  ansible.builtin.command: |
+    /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+    -m ec2 \
+    -a fetch-config \
+    -c file:/opt/aws/amazon-cloudwatch-agent/user/{{ cloudwatch_config_json_file|basename }}
+
+- name: Start CloudWatch Agent
+  command: |
+    /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+    -m {{ cloudwatch_agent_mode }} \
+    -a start
+
 - name: Restart cloudwatch agent
   ansible.builtin.service:
     name: amazon-cloudwatch-agent

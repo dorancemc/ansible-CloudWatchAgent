@@ -3,6 +3,9 @@
 cloudwatch_agent_force_install: false
 cloudwatch_agent_ssm_configured: false
 cloudwatch_agent_mode: ec2 # ec2 or onPremise
+# cloudwatch_config_json_file: amazon-cloudwatch-agent/cloudwatch-agent.json
+  # https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-Configuration-File-Details.html
+  # put the json file in the same folder as the playbook in the files folder
 cloudwatch_config_files: {} 
   # common-config: amazon-cloudwatch-agent/common-config.toml # https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-commandline-fleet.html#CloudWatch-Agent-profile-instance-first
 default_cloudwatch_config_files:

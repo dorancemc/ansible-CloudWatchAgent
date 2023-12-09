@@ -1,6 +1,6 @@
 ---
 
-- name: Copy definition file from local path
+- name: Copy definition files
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: /opt/aws/amazon-cloudwatch-agent/etc/{{ item|basename }}
@@ -8,4 +8,27 @@
     group: cwagent
     mode: 0664
   with_items: "{{ __cloudwatch_config_files.values() }}"
-  notify: restart cloudwatch agent
+  notify: Restart cloudwatch agent
+
+- name: Create folder for config json files
+  ansible.builtin.file:
+    path: /opt/aws/amazon-cloudwatch-agent/user
+    state: directory
+    owner: cwagent
+    group: cwagent
+    mode: 0775
+  when:
+    - cloudwatch_config_json_file is defined
+
+- name: Copy config json files
+  ansible.builtin.copy:
+    src: "{{ cloudwatch_config_json_file }}"
+    dest: /opt/aws/amazon-cloudwatch-agent/user/{{ cloudwatch_config_json_file|basename }}
+    owner: cwagent
+    group: cwagent
+    mode: 0664
+  when:
+    - cloudwatch_config_json_file is defined
+  notify:
+    - Apply cloudwatch agent config
+    - Restart cloudwatch agent
